@@ -125,5 +125,5 @@ def plotChart(data):
 date_start = (datetime.today()-timedelta(days=st.session_state['ndays'])).date()
 df = getData(code, date_start, datetime.today().date())     
 chart_title = choices[st.session_state['code_index'] ]
-# st.markdown(f'<h3 style="text-align: center; color: black;">{chart_title}</h3>', unsafe_allow_html=True)
+st.markdown(f'<h3 style="text-align: center; color: black;">{chart_title}</h3>', unsafe_allow_html=True)
 plotChart(df)
