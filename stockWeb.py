@@ -8,6 +8,8 @@ import json
 from streamlit_lottie import st_lottie
 import streamlit as st
 
+import pandas as pd
+
 # JSON을 읽어 들이는 함수
 def loadJSON(path):
     f = open(path, 'r')
@@ -123,7 +125,31 @@ def plotChart(data):
 # plotChart(df)
 
 date_start = (datetime.today()-timedelta(days=st.session_state['ndays'])).date()
-df = getData(code, date_start, datetime.today().date())     
+date_end = datetime.today().date()
+df = getData(code, date_start, date_end)     
 chart_title = choices[st.session_state['code_index'] ]
 st.markdown(f'<h3 style="text-align: center; color: black;">{chart_title}</h3>', unsafe_allow_html=True)
 plotChart(df)
+
+""
+"-----"
+""
+
+stock_name = chart_title.split(":")[1].strip()
+st.header("파일 내려받기")
+st.dataframe(df)
+# st.text(f'{stock_name}_{date_start}_{date_end}.csv')
+st.download_button(label="파일 내려받기",data=df.to_csv(), file_name=f'{stock_name}_{date_start}_{date_end}.csv')
+
+""
+"-----"
+""
+
+st.header("파일 업로드")
+myFile = st.file_uploader("CSV 파일 업로드") 
+out1 = st.empty()
+
+if myFile:
+    out1.write('업로드 성공')
+    myDF = pd.read_csv(myFile) # 올린 csv 파일을 pandas로 열여줘야함
+    st.dataframe(myDF)
